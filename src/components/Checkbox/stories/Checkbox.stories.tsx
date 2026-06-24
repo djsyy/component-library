@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
+import { ArgTypes, Description, Primary, Stories, Title } from '@storybook/addon-docs/blocks';
 import { useArgs } from 'storybook/preview-api';
 import { fn } from 'storybook/test';
 
@@ -10,6 +11,21 @@ const meta = {
   component: Checkbox,
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component:
+          'A controlled checkbox component with checked, unchecked, indeterminate, disabled, required, and error states.',
+      },
+      page: () => (
+        <>
+          <Title />
+          <Description />
+          <Primary />
+          <ArgTypes />
+          <Stories />
+        </>
+      ),
+    },
   },
   tags: ['autodocs'],
   // Controls let you change props in the Storybook UI.

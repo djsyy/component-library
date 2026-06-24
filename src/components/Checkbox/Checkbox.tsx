@@ -10,13 +10,21 @@ export enum CheckboxState {
 }
 
 export interface CheckboxProps {
+  /** Main text displayed next to the checkbox. */
   label: string;
+  /** Controlled visual state for the checkbox. */
   state: CheckboxState;
+  /** Prevents interaction and applies disabled styling. */
   disabled?: boolean;
+  /** Forces the checkbox into an error state. */
   error?: boolean;
+  /** Message shown below the sub-label when the checkbox is in an error state. */
   errorMessage?: string;
+  /** Called when the user toggles the checkbox. Receives the next checked value. */
   onChange: (checked: boolean) => void;
+  /** Marks the checkbox as required. If unchecked, the component displays an error state. */
   required?: boolean;
+  /** Optional helper text displayed below the main label. */
   subLabel?: string;
 }
 
