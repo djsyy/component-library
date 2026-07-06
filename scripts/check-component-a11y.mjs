@@ -1,7 +1,7 @@
 import { JSDOM } from "jsdom";
 import React, { act } from "react";
 import { createRoot } from "react-dom/client";
-import { createServer } from "vite";
+import { createLogger, createServer } from "vite";
 import axe from "axe-core";
 
 const axeConfig = {
@@ -65,9 +65,21 @@ const withDomGlobals = async (dom, run) => {
   }
 };
 
+const viteLogger = createLogger();
+const originalError = viteLogger.error;
+
+viteLogger.error = (message, options) => {
+  if (typeof message === "string" && message.includes("WebSocket server error")) {
+    return;
+  }
+
+  return originalError(message, options);
+};
+
 const vite = await createServer({
   appType: "custom",
   configFile: false,
+  customLogger: viteLogger,
   server: {
     hmr: false,
     middlewareMode: true,
