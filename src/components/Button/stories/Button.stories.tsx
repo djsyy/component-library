@@ -7,7 +7,7 @@ import {
   Stories,
   Title,
 } from "@storybook/addon-docs/blocks";
-import { fn } from "storybook/test";
+import { expect, fn, userEvent, within } from "storybook/test";
 
 import { Button } from "../Button.tsx";
 import { ButtonSize, ButtonVariant } from "../button.types";
@@ -20,7 +20,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "A button component with primary, secondary, danger, loading, disabled, and size states.",
+          "A semantic button component that uses the native `<button>` element, exposes its accessible name from visible text, supports keyboard activation with Enter and Space, and marks loading state with `aria-busy` while disabling interaction.",
       },
       page: () => (
         <>
@@ -72,6 +72,24 @@ export const Medium: Story = {
     children: "Medium",
     size: ButtonSize.Medium,
   },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Keyboard: receives focus with Tab and activates with Space or Enter. Accessibility: native button semantics provide role, name, and disabled behavior automatically.",
+      },
+    },
+  },
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+    const button = canvas.getByRole("button", { name: "Medium" });
+
+    await userEvent.tab();
+    await expect(button).toHaveFocus();
+
+    await userEvent.keyboard("[Space]");
+    await expect(args.onClick).toHaveBeenCalled();
+  },
 };
 
 export const Secondary: Story = {
@@ -92,6 +110,21 @@ export const Loading: Story = {
   args: {
     children: "Loading",
     loading: true,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Accessibility: loading buttons remain semantic buttons, expose `aria-busy=\"true\"`, and are disabled so keyboard users cannot trigger duplicate actions.",
+      },
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const button = canvas.getByRole("button", { name: "Loading" });
+
+    await expect(button).toBeDisabled();
+    await expect(button).toHaveAttribute("aria-busy", "true");
   },
 };
 

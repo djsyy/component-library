@@ -33,6 +33,7 @@ export const TextInput = ({
   ...props
 }: TextInputProps) => {
   const inputId = useId();
+  const labelId = useId();
   const detailsId = useId();
   const errorMessageId = useId();
   const controlId = id ?? inputId;
@@ -58,11 +59,11 @@ export const TextInput = ({
     .join(" ");
 
   return (
-    <label className={rootClassName} htmlFor={controlId}>
-      <span className="input__label">
+    <div className={rootClassName}>
+      <label className="input__label" htmlFor={controlId} id={labelId}>
         {label}
         {required ? <span aria-hidden="true"> *</span> : null}
-      </span>
+      </label>
       <input
         {...props}
         id={controlId}
@@ -73,21 +74,23 @@ export const TextInput = ({
         placeholder={placeholder}
         minLength={minLength}
         maxLength={maxLength}
+        aria-labelledby={labelId}
         aria-describedby={describedBy || undefined}
+        aria-errormessage={hasError && errorMessage ? errorMessageId : undefined}
         aria-invalid={hasError || undefined}
       />
-      <span className="input__supporting">
+      <div className="input__supporting">
         {details ? (
-          <span className="input__details" id={detailsId}>
+          <p className="input__details" id={detailsId}>
             {details}
-          </span>
+          </p>
         ) : null}
         {hasError && errorMessage ? (
-          <span className="input__error-message" id={errorMessageId}>
+          <p className="input__error-message" id={errorMessageId} role="alert">
             {errorMessage}
-          </span>
+          </p>
         ) : null}
-      </span>
-    </label>
+      </div>
+    </div>
   );
 };

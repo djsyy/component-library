@@ -39,6 +39,7 @@ export const Checkbox = ({
   subLabel,
 }: CheckboxProps) => {
   const checkboxId = useId();
+  const labelId = useId();
   const descriptionId = useId();
   const errorMessageId = useId();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -75,7 +76,7 @@ export const Checkbox = ({
     .join(' ');
 
   return (
-    <label className={className} htmlFor={checkboxId}>
+    <div className={className}>
       <input
         ref={inputRef}
         id={checkboxId}
@@ -83,24 +84,37 @@ export const Checkbox = ({
         checked={isChecked}
         disabled={disabled}
         required={required}
+        aria-checked={isIndeterminate ? 'mixed' : isChecked}
+        aria-labelledby={labelId}
         aria-describedby={descriptionIds || undefined}
+        aria-errormessage={hasError && errorMessage ? errorMessageId : undefined}
         aria-invalid={hasError || undefined}
         onChange={handleChange}
       />
-      <span className="checkbox__control" aria-hidden="true" />
-      <span className="checkbox__content">
-        <span className="checkbox__label">{label}</span>
-        {subLabel ? (
-          <span className="checkbox__sub-label" id={descriptionId}>
-            {subLabel}
-          </span>
-        ) : null}
-        {hasError && errorMessage ? (
-          <span className="checkbox__error-message" id={errorMessageId}>
-            {errorMessage}
-          </span>
-        ) : null}
-      </span>
-    </label>
+      <label className="checkbox__interactive" htmlFor={checkboxId}>
+        <span className="checkbox__control" aria-hidden="true" />
+        <span className="checkbox__label" id={labelId}>
+          {label}
+        </span>
+      </label>
+      {(subLabel || (hasError && errorMessage)) ? (
+        <div className="checkbox__supporting">
+          {subLabel ? (
+            <p className="checkbox__sub-label" id={descriptionId}>
+              {subLabel}
+            </p>
+          ) : null}
+          {hasError && errorMessage ? (
+            <p
+              className="checkbox__error-message"
+              id={errorMessageId}
+              role="alert"
+            >
+              {errorMessage}
+            </p>
+          ) : null}
+        </div>
+      ) : null}
+    </div>
   );
 };

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { ArgTypes, Description, Primary, Stories, Title } from '@storybook/addon-docs/blocks';
 import { useArgs } from 'storybook/preview-api';
-import { fn } from 'storybook/test';
+import { expect, fn, userEvent, within } from 'storybook/test';
 
 import { Checkbox, CheckboxState } from '../Checkbox';
 
@@ -14,7 +14,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'A controlled checkbox component with checked, unchecked, indeterminate, disabled, required, and error states.',
+          'A native checkbox that keeps its accessible name limited to the visible label, exposes helper and error text through `aria-describedby` and `aria-errormessage`, and supports keyboard toggling with Space.',
       },
       page: () => (
         <>
@@ -75,14 +75,46 @@ export const Standard: Story = {
   args: {
     state: CheckboxState.Unchecked,
   },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Keyboard: focus moves in with Tab and toggles with Space. Accessibility: the checkbox uses a native input, a programmatic label, and optional helper text announced through `aria-describedby`.',
+      },
+    },
+  },
   render: renderInteractiveCheckbox,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const checkbox = canvas.getByRole('checkbox', { name: 'Default label' });
+
+    await userEvent.tab();
+    await expect(checkbox).toHaveFocus();
+
+    await userEvent.keyboard('[Space]');
+    await expect(checkbox).toBeChecked();
+  },
 };
 
 export const Indeterminate: Story = {
   args: {
     state: CheckboxState.Indeterminate,
   },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Accessibility: indeterminate state is exposed with `aria-checked="mixed"` so assistive technology announces it correctly.',
+      },
+    },
+  },
   render: renderInteractiveCheckbox,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const checkbox = canvas.getByRole('checkbox', { name: 'Default label' });
+
+    await expect(checkbox).toHaveAttribute('aria-checked', 'mixed');
+  },
 };
 
 export const WithSubLabel: Story = {
@@ -97,10 +129,26 @@ export const Required: Story = {
   args: {
     state: CheckboxState.Unchecked,
     required: true,
-    errorMessage: "This check is required",
+    errorMessage: 'This check is required',
     subLabel: 'Test SubLabel',
   },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Accessibility: required validation marks the checkbox invalid and links the inline error through `aria-errormessage` for screen readers.',
+      },
+    },
+  },
   render: renderInteractiveCheckbox,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const checkbox = canvas.getByRole('checkbox', { name: 'Default label' });
+
+    await expect(checkbox).toHaveAttribute('aria-invalid', 'true');
+    await expect(checkbox).toHaveAttribute('aria-errormessage');
+    await expect(canvas.getByText('This check is required')).toHaveAttribute('role', 'alert');
+  },
 };
 
 export const Disabled: Story = {

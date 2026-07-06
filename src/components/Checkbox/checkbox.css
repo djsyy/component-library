@@ -1,4 +1,5 @@
 .checkbox {
+  position: relative;
   display: inline-grid;
   grid-template-columns: 1rem auto;
   column-gap: var(--space-2);
@@ -11,7 +12,15 @@
 .checkbox input {
   position: absolute;
   opacity: 0;
-  pointer-events: none;
+}
+
+.checkbox__interactive {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1rem auto;
+  column-gap: inherit;
+  align-items: start;
+  cursor: inherit;
 }
 
 .checkbox__control {
@@ -30,20 +39,22 @@
     box-shadow 120ms ease;
 }
 
-.checkbox__content {
-  display: grid;
-  gap: var(--space-1);
-  padding-top: 0;
-}
-
 .checkbox__label {
+  display: block;
   color: var(--color-text);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-regular);
   line-height: var(--line-height-tight);
 }
 
+.checkbox__supporting {
+  grid-column: 2;
+  display: grid;
+  gap: var(--space-1);
+}
+
 .checkbox__sub-label {
+  margin: 0;
   color: var(--color-text-muted);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-regular);
@@ -51,19 +62,20 @@
 }
 
 .checkbox__error-message {
+  margin: 0;
   color: var(--color-danger);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-regular);
   line-height: var(--line-height-normal);
 }
 
-.checkbox input:checked + .checkbox__control,
-.checkbox input:indeterminate + .checkbox__control {
+.checkbox input:checked + .checkbox__interactive .checkbox__control,
+.checkbox input:indeterminate + .checkbox__interactive .checkbox__control {
   border-color: var(--color-primary);
   background: var(--color-primary);
 }
 
-.checkbox input:checked + .checkbox__control::after {
+.checkbox input:checked + .checkbox__interactive .checkbox__control::after {
   content: '';
   width: 0.25rem;
   height: 0.45rem;
@@ -72,7 +84,7 @@
   transform: rotate(45deg) translate(-0.025rem, -0.075rem);
 }
 
-.checkbox input:indeterminate + .checkbox__control::after {
+.checkbox input:indeterminate + .checkbox__interactive .checkbox__control::after {
   content: '';
   width: 0.5rem;
   height: 0.1rem;
@@ -80,7 +92,7 @@
   background: var(--color-white);
 }
 
-.checkbox input:focus-visible + .checkbox__control {
+.checkbox input:focus-visible + .checkbox__interactive .checkbox__control {
   box-shadow: 0 0 0 0.15rem var(--color-blue-100);
 }
 
@@ -88,8 +100,8 @@
   border-color: var(--color-danger);
 }
 
-.checkbox--error input:checked + .checkbox__control,
-.checkbox--error input:indeterminate + .checkbox__control {
+.checkbox--error input:checked + .checkbox__interactive .checkbox__control,
+.checkbox--error input:indeterminate + .checkbox__interactive .checkbox__control {
   border-color: var(--color-danger);
   background: var(--color-danger);
 }

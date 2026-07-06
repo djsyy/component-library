@@ -8,7 +8,7 @@ import {
   Title,
 } from "@storybook/addon-docs/blocks";
 import { useArgs } from "storybook/preview-api";
-import { fn } from "storybook/test";
+import { expect, fn, userEvent, within } from "storybook/test";
 
 import { TextInput } from "../TextInput";
 
@@ -20,7 +20,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "A controlled text input component with label position, helper text, error, disabled, and required states.",
+          "A native text input with explicit label association, helper and error text announced through `aria-describedby` and `aria-errormessage`, and standard keyboard text entry behavior.",
       },
       page: () => (
         <>
@@ -91,7 +91,26 @@ export const Standard: Story = {
   args: {
     type: "text",
   },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Keyboard: focus enters with Tab and typing updates the value directly in the native input. Accessibility: the input is labelled by visible text and keeps helper text out of the accessible name.",
+      },
+    },
+  },
   render: renderInteractiveInput,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const input = canvas.getByRole("textbox", { name: "Email address" });
+
+    await userEvent.tab();
+    await expect(input).toHaveFocus();
+
+    await userEvent.clear(input);
+    await userEvent.type(input, "person@example.com");
+    await expect(input).toHaveValue("person@example.com");
+  },
 };
 
 export const LeftLabel: Story = {
@@ -144,7 +163,26 @@ export const ErrorState: Story = {
     errorMessage: "Remove spaces and uppercase characters.",
     type: "text",
   },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Accessibility: invalid inputs expose `aria-invalid`, keep the label as the accessible name, and announce the inline error through `aria-errormessage`.",
+      },
+    },
+  },
   render: renderInteractiveInput,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const input = canvas.getByRole("textbox", { name: "Username" });
+
+    await expect(input).toHaveAttribute("aria-invalid", "true");
+    await expect(input).toHaveAttribute("aria-errormessage");
+    await expect(canvas.getByText("Remove spaces and uppercase characters.")).toHaveAttribute(
+      "role",
+      "alert",
+    );
+  },
 };
 
 export const Disabled: Story = {
