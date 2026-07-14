@@ -87,13 +87,21 @@ const vite = await createServer({
 });
 
 try {
-  const [{ Button }, buttonTypes, { Checkbox, CheckboxState }, { TextInput }, { Select }] =
+  const [
+    { Button },
+    buttonTypes,
+    { Checkbox, CheckboxState },
+    { TextInput },
+    { Select },
+    { Menu, MenuItem, MenuSeparator },
+  ] =
     await Promise.all([
       vite.ssrLoadModule("/src/components/Button/Button.tsx"),
       vite.ssrLoadModule("/src/components/Button/button.types.ts"),
       vite.ssrLoadModule("/src/components/Checkbox/Checkbox.tsx"),
       vite.ssrLoadModule("/src/components/TextInput/TextInput.tsx"),
       vite.ssrLoadModule("/src/components/Select/Select.tsx"),
+      vite.ssrLoadModule("/src/components/Menu/Menu.tsx"),
     ]);
 
   const { ButtonSize, ButtonVariant } = buttonTypes;
@@ -216,6 +224,35 @@ try {
             option.label,
           ),
         ),
+      ),
+    },
+    {
+      id: "menu-standard",
+      element: React.createElement(
+        Menu,
+        {
+          defaultOpen: true,
+          label: "Open menu",
+        },
+        React.createElement(MenuItem, { onClick: () => {} }, "Profile"),
+        React.createElement(MenuItem, { onClick: () => {} }, "Settings"),
+        React.createElement(MenuSeparator),
+        React.createElement(MenuItem, { onClick: () => {} }, "Sign out"),
+      ),
+    },
+    {
+      id: "menu-icon-only",
+      element: React.createElement(
+        Menu,
+        {
+          ariaLabel: "Open account menu",
+          defaultOpen: true,
+          triggerIcon: React.createElement("span", null, "Menu"),
+        },
+        React.createElement(MenuItem, { onClick: () => {} }, "Profile"),
+        React.createElement(MenuItem, { disabled: true, onClick: () => {} }, "Settings"),
+        React.createElement(MenuSeparator),
+        React.createElement(MenuItem, { onClick: () => {} }, "Sign out"),
       ),
     },
   ];
