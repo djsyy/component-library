@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import {
@@ -7,7 +8,6 @@ import {
   Stories,
   Title,
 } from "@storybook/addon-docs/blocks";
-import { useArgs } from "storybook/preview-api";
 import { expect, fn, userEvent, within } from "storybook/test";
 
 import { TextInput } from "../TextInput";
@@ -74,14 +74,19 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const renderInteractiveInput: Story["render"] = (args) => {
-  const [, updateArgs] = useArgs<typeof args>();
+  const [value, setValue] = useState(args.value);
+
+  useEffect(() => {
+    setValue(args.value);
+  }, [args.value]);
 
   return (
     <TextInput
       {...args}
+      value={value}
       onChange={(event) => {
         args.onChange?.(event);
-        updateArgs({ value: event.target.value });
+        setValue(event.target.value);
       }}
     />
   );

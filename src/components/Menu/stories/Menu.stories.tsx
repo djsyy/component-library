@@ -91,6 +91,35 @@ export const Standard: Story = {
   },
 };
 
+export const ClosesOnEscape: Story = {
+  render: renderMenu,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const trigger = canvas.getByRole("button", { name: "Open menu" });
+
+    await userEvent.click(trigger);
+    await canvas.findByRole("menu");
+
+    await userEvent.keyboard("[Escape]");
+    await expect(canvas.queryByRole("menu")).not.toBeInTheDocument();
+    await expect(trigger).toHaveFocus();
+  },
+};
+
+export const ClosesAfterSelection: Story = {
+  render: renderMenu,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const trigger = canvas.getByRole("button", { name: "Open menu" });
+
+    await userEvent.click(trigger);
+    await userEvent.click(await canvas.findByRole("menuitem", { name: "Profile" }));
+
+    await expect(canvas.queryByRole("menu")).not.toBeInTheDocument();
+    await expect(trigger).toHaveAttribute("aria-expanded", "false");
+  },
+};
+
 export const CenterAligned: Story = {
   args: {
     align: "center",

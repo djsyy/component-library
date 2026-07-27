@@ -1,7 +1,7 @@
+import { useEffect, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { ArgTypes, Description, Primary, Stories, Title } from '@storybook/addon-docs/blocks';
-import { useArgs } from 'storybook/preview-api';
 import { expect, fn, userEvent, within } from 'storybook/test';
 
 import { Checkbox, CheckboxState } from '../Checkbox';
@@ -53,19 +53,21 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// This render function makes the story interactive.
-// The component is controlled, so the story owns state and updates args on change.
+// This render function makes the controlled component interactive in Storybook and Vitest.
 const renderInteractiveCheckbox: Story['render'] = (args) => {
-  const [, updateArgs] = useArgs<typeof args>();
+  const [state, setState] = useState(args.state);
+
+  useEffect(() => {
+    setState(args.state);
+  }, [args.state]);
 
   return (
     <Checkbox
       {...args}
+      state={state}
       onChange={(checked) => {
         args.onChange?.(checked);
-        updateArgs({
-          state: checked ? CheckboxState.Checked : CheckboxState.Unchecked,
-        });
+        setState(checked ? CheckboxState.Checked : CheckboxState.Unchecked);
       }}
     />
   );
