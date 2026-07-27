@@ -4,7 +4,7 @@ const config: StorybookConfig = {
   "stories": [
     "../src/components/**/stories/*.stories.@(js|jsx|mjs|ts|tsx)"
   ],
-  "addons": ["@storybook/addon-docs", "@storybook/addon-a11y"],
+  "addons": ["@storybook/addon-docs", "@storybook/addon-a11y", "@storybook/addon-vitest"],
   "framework": "@storybook/react-vite"
 };
 export default config;
