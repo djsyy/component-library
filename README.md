@@ -38,11 +38,10 @@ Storybook is available at `http://localhost:6006`.
 
 ```bash
 npm test
-npm run test-storybook
 npm run a11y:check
 ```
 
-`test-storybook` runs Storybook stories and their `play` functions in headless Chromium. `a11y:check` runs Axe checks for representative component states.
+`npm test` runs unit tests and Storybook stories with `play` functions in headless Chromium. `a11y:check` runs Axe checks for representative component states.
 
 ## Quality checks
 

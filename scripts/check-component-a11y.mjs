@@ -94,6 +94,7 @@ try {
     { TextInput },
     { Select },
     { Menu, MenuItem, MenuSeparator },
+    { Card },
   ] =
     await Promise.all([
       vite.ssrLoadModule("/src/components/Button/Button.tsx"),
@@ -102,6 +103,7 @@ try {
       vite.ssrLoadModule("/src/components/TextInput/TextInput.tsx"),
       vite.ssrLoadModule("/src/components/Select/Select.tsx"),
       vite.ssrLoadModule("/src/components/Menu/Menu.tsx"),
+      vite.ssrLoadModule("/src/components/Card/Card.tsx"),
     ]);
 
   const { ButtonSize, ButtonVariant } = buttonTypes;
@@ -113,6 +115,15 @@ try {
   ];
 
   const testCases = [
+    {
+      id: "card-elevated",
+      element: React.createElement(
+        Card,
+        null,
+        React.createElement("h2", null, "Project update"),
+        React.createElement("p", null, "The component library is ready for review."),
+      ),
+    },
     {
       id: "button-medium",
       element: React.createElement(
