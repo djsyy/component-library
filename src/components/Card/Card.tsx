@@ -3,6 +3,8 @@ import type React from "react";
 import "./Card.css";
 
 export interface CardProps extends React.ComponentPropsWithoutRef<"article"> {
+  /** Content rendered inside the button. */
+  children?: React.ReactNode;
   /** Visual styling of the card surface. */
   variant?: "elevated" | "outlined";
 }
