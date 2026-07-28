@@ -85,6 +85,7 @@ export function Menu({
   ...props
 }: MenuProps) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
+  const [initialFocusIndex, setInitialFocusIndex] = useState(0);
   const menuId = useId();
   const triggerId = useId();
   const menuRef = useRef<HTMLDivElement>(null);
@@ -120,9 +121,9 @@ export function Menu({
 
   useEffect(() => {
     if (isOpen) {
-      focusMenuItem(menuRef.current, 0);
+      focusMenuItem(menuRef.current, initialFocusIndex);
     }
-  }, [isOpen]);
+  }, [initialFocusIndex, isOpen]);
 
   const handleTriggerKeyDown = (
     event: React.KeyboardEvent<HTMLButtonElement>,
@@ -131,6 +132,7 @@ export function Menu({
       event.preventDefault();
 
       if (!isOpen) {
+        setInitialFocusIndex(event.key === "ArrowDown" ? 0 : -1);
         setIsOpen(true);
         return;
       }
@@ -184,7 +186,12 @@ export function Menu({
           aria-label={label ? undefined : ariaLabel}
           className="menu__trigger"
           id={triggerId}
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={() => {
+            if (!isOpen) {
+              setInitialFocusIndex(0);
+            }
+            setIsOpen(!isOpen);
+          }}
           onKeyDown={handleTriggerKeyDown}
           ref={triggerRef}
           type="button"

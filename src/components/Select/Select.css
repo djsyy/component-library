@@ -80,14 +80,15 @@
 }
 
 .select__control:hover:not(:disabled) {
-  border-color: var(--color-gray-300);
+  border-color: var(--color-gray-600);
   background-color: var(--color-surface);
 }
 
 .select__control:focus-visible {
-  outline: 2px solid var(--color-blue-100);
+  outline: 2px solid var(--color-focus-ring);
   outline-offset: 2px;
   border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-background);
 }
 
 .select__control:disabled {
@@ -113,8 +114,4 @@
 
 .select-field--error .select__control {
   border-color: var(--color-danger);
-}
-
-.select-field--error .select__control:focus-visible {
-  outline-color: var(--color-red-50);
 }

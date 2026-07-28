@@ -28,7 +28,7 @@
 
 .button:hover:not(:disabled) {
   background: var(--button-hover-bg, var(--button-bg, var(--color-surface)));
-  border-color: var(--button-hover-border-color, var(--color-gray-300));
+  border-color: var(--button-hover-border-color, var(--color-gray-600));
 }
 
 .button:active:not(:disabled) {
@@ -36,8 +36,9 @@
 }
 
 .button:focus-visible {
-  outline: 2px solid var(--button-focus-ring, var(--color-blue-100));
+  outline: 2px solid var(--button-focus-ring, var(--color-focus-ring));
   outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--color-background);
 }
 
 .button:disabled,
@@ -98,7 +99,7 @@
   background: var(--button-secondary-hover-bg, var(--color-surface));
   border-color: var(
     --button-secondary-hover-border-color,
-    var(--color-gray-300)
+    var(--color-gray-600)
   );
 }
 

@@ -32,6 +32,12 @@ const click = (element: Element) => {
   });
 };
 
+const keyDown = (element: Element, key: string) => {
+  act(() => {
+    element.dispatchEvent(new KeyboardEvent("keydown", { bubbles: true, key }));
+  });
+};
+
 afterEach(() => {
   act(() => {
     roots.forEach((root) => root.unmount());
@@ -161,5 +167,21 @@ describe("Menu", () => {
     click(firstItem!);
     expect(menu?.isConnected).toBe(false);
     expect(trigger?.getAttribute("aria-expanded")).toBe("false");
+  });
+
+  it("focuses the final action when opened with ArrowUp", () => {
+    const container = render(
+      <Menu label="Actions">
+        <MenuItem>Rename</MenuItem>
+        <MenuItem>Archive</MenuItem>
+      </Menu>,
+    );
+    const trigger = container.querySelector("button");
+
+    trigger?.focus();
+    keyDown(trigger!, "ArrowUp");
+
+    const items = container.querySelectorAll('[role="menuitem"]');
+    expect(document.activeElement).toBe(items[1]);
   });
 });

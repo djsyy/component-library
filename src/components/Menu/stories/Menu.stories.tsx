@@ -106,6 +106,22 @@ export const ClosesOnEscape: Story = {
   },
 };
 
+export const OpensFromArrowUp: Story = {
+  render: renderMenu,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const trigger = canvas.getByRole("button", { name: "Open menu" });
+
+    await userEvent.tab();
+    await expect(trigger).toHaveFocus();
+    await userEvent.keyboard("[ArrowUp]");
+
+    await expect(
+      canvas.getByRole("menuitem", { name: "Sign out" }),
+    ).toHaveFocus();
+  },
+};
+
 export const ClosesAfterSelection: Story = {
   render: renderMenu,
   play: async ({ canvasElement }) => {
