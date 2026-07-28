@@ -5,6 +5,7 @@ A React component library built with TypeScript, Vite, and Storybook.
 ## Components
 
 - `Button` — Action button with primary, secondary, loading, and size variants.
+- `Card` — Semantic content container with elevated and outlined variants.
 - `TextInput` — Labeled text input with helper text and error support.
 - `Checkbox` — Controlled checkbox with checked, unchecked, and indeterminate states.
 - `Menu` — Triggered action menu with `MenuItem` and `MenuSeparator` helpers.

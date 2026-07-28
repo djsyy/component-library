@@ -1,0 +1,20 @@
+.card {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--card-gap, var(--space-4));
+  padding: var(--card-padding, var(--space-6));
+  border: 1px solid var(--card-border-color, var(--color-border));
+  border-radius: var(--card-radius, 0.75rem);
+  background: var(--card-background, var(--color-background));
+  color: var(--card-color, var(--color-text));
+  font-family: var(--font-family-sans);
+}
+
+.card--elevated {
+  box-shadow: var(--card-elevated-shadow, 0 1px 3px rgb(15 23 42 / 0.12));
+}
+
+.card--outlined {
+  box-shadow: none;
+}
